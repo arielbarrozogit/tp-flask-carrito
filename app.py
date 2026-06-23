@@ -26,17 +26,56 @@ def home():
 def listar_productos():
     return jsonify(productos)
 
+@app.route('/carrito', methods=['GET'])
+def ver_carrito():
 
-#  agregar al carrito
+    resumen = {}
+    total = 0
+
+    for producto in carrito:
+
+        id_producto = producto["id"]
+
+        if id_producto not in resumen:
+            resumen[id_producto] = {
+                "id": producto["id"],
+                "nombre": producto["nombre"],
+                "precio_unitario": producto["precio"],
+                "cantidad": 0,
+                "subtotal": 0
+            }
+
+        resumen[id_producto]["cantidad"] += 1
+        resumen[id_producto]["subtotal"] += producto["precio"]
+
+        total += producto["precio"]
+
+    return jsonify({
+        "items": list(resumen.values()),
+        "total": total
+    })
+
 @app.route('/carrito', methods=['POST'])
 def agregar_carrito():
-    data = request.json
+
+    data = request.get_json()
+
+    if not data:
+        return jsonify({
+            "error": "Debe enviar JSON"
+        }), 400
+
     producto_id = data.get("id")
 
-    producto = next((p for p in productos if p["id"] == producto_id), None)
+    producto = next(
+        (p for p in productos if p["id"] == producto_id),
+        None
+    )
 
     if not producto:
-        return jsonify({"error": "Producto no encontrado"}), 404
+        return jsonify({
+            "error": "Producto no encontrado"
+        }), 404
 
     carrito.append(producto)
 
@@ -44,7 +83,6 @@ def agregar_carrito():
         "mensaje": "Producto agregado",
         "carrito": carrito
     })
-
 
 @app.route('/carrito/<int:id_producto>', methods=['DELETE'])
 def eliminar_producto(id_producto):
