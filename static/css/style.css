@@ -1,0 +1,45 @@
+body{
+    background:#f8f9fa;
+}
+
+.card-producto{
+
+    border:none;
+
+    border-radius:18px;
+
+    transition:.25s;
+
+    box-shadow:
+        0 0 10px rgba(13,110,253,.08);
+}
+
+.card-producto:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:
+        0 0 20px rgba(13,110,253,.18);
+}
+
+.carrito-card{
+
+    border:none;
+
+    border-radius:18px;
+
+    box-shadow:
+        0 0 15px rgba(25,135,84,.12);
+}
+
+.btn-danger{
+
+    border-radius:50%;
+
+    width:35px;
+
+    height:35px;
+
+    padding:0;
+
+}
